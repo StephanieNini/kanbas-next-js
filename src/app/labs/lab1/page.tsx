@@ -36,6 +36,34 @@ export default function Lab1() {
 </ul>
 </div>
 
+ <div id="wd-tables">
+        <h4>Table Tag</h4>
+        <table border={1} width="100%">	{/* table, border, width */}
+          <thead>					{/* table headings */}
+            <tr>						{/* table row */}
+              <th>Quiz</th>				{/* table heading*/}
+              <th>Topic</th>
+              <th>Date</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tbody>					{/* table body */}
+            <tr>						{/* table row */}
+              <td>Q1</td>				{/* table data / cell */}
+              <td>HTML</td>
+              <td>2/3/21</td>
+              <td>85</td>
+            </tr>
+          </tbody>
+          <tfoot>					{/* table row */}
+            <tr>
+              <td colSpan={3}>Average</td>	{/* column span */}
+              <td>90</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
 
 <br /><br />
 <section id="wd-text-fields">
@@ -54,6 +82,18 @@ export default function Lab1() {
   <p><button id="wd-button-primary" type="button">Primary</button></p>
   <p><button id="wd-button-submit" type="submit">Submit</button></p>
   <p><button id="wd-button-reset" type="reset">Reset</button></p>
+</section>
+
+<section id="wd-images">
+<div id="wd-images">
+  <h4>Image tag</h4>
+  Loading an image from the internet: <br />
+  <img id="wd-starship" width="400px"   src="https://www.staradvertiser.com/wp-content/uploads/2021/08/web1_Starship-gap2.jpg" />
+  <br />
+  Loading a local image:
+  <br />
+  <img id="wd-camping" src="/images/camping.jpg" height="200px" />
+</div>
 </section>
 
 <br/><br/>

@@ -16,8 +16,16 @@ export default function Assignments() {
           </Link>
         </li>
         <li className="wd-assignment-list-item">
-          {/* Complete On Your Own */}
+          <Link href="/Courses/1234/Assignments/124" className="wd-assignment-link">
+            A2 - CSS + BOOTSTRAP
+          </Link>
+        </li>
+        <li className="wd-assignment-list-item">
+          <Link href="/Courses/1234/Assignments/125" className="wd-assignment-link">
+            A3 - JAVASCRIPT + REACT
+          </Link>
         </li>
       </ul>
     </div>
-);}
+);
+}
