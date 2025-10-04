@@ -1,14 +1,13 @@
-import Link from "next/link";
-export default function KambazNavigation() {
+import { ReactNode } from "react";
+import KambazNavigation from "./Navigation";
+
+export default function KambazLayout({ children }: { children: ReactNode }) {
   return (
-    <div>
-      <a href="https://www.northeastern.edu/"
-         target="_blank"      > Northeastern</a><br/>
-      <Link href="/Account"   > Account</Link><br/>
-      <Link href="/Dashboard" > Dashboard</Link><br/>
-      <Link href="/Dashboard" > Courses</Link><br/>
-      <Link href="/Calendar"  > Calendar</Link><br/>
-      <Link href="/Inbox"     > Inbox</Link><br/>
-      <Link href="/labs"      > Labs</Link><br/>
+    <div style={{ display: "flex" }}>
+      <KambazNavigation>{null}</KambazNavigation>
+      <main style={{ marginLeft: "80px", padding: "16px", width: "100%" }}>
+        {children}
+      </main>
     </div>
-);}
+  );
+}
