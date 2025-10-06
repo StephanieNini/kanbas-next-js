@@ -34,14 +34,18 @@ export default function KambazNavigation() {
        </Link>
      </ListGroupItem><br />
 
-    {/*course link */}
-     <ListGroupItem className="border-0 bg-black text-center">
-       <Link href="/Courses" id="wd-courses-link" className="text-white text-decoration-none d-flex flex-column align-items-center">
-         <LiaBookSolid className="fs-1 text-danger" />
-         <br />
-         Courses
-       </Link>
-     </ListGroupItem><br />
+{/* course link */}
+<ListGroupItem className="border-0 bg-black text-center">
+  <Link
+    href="/Courses/6789/Home"
+    id="wd-courses-link"
+    className="text-white text-decoration-none d-flex flex-column align-items-center"
+  >
+    <LiaBookSolid className="fs-1 text-danger" />
+    <br />
+    Courses
+  </Link>
+</ListGroupItem><br />
 
     {/* calendar link */}
      <ListGroupItem className="border-0 bg-black text-center">
