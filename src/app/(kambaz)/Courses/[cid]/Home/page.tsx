@@ -28,7 +28,7 @@ export default function Home() {
             </td>
 
             {/* RIGHT COURSE STATUS */}
-            <td valign="top">
+            <td valign="top" className="hide-at-3-4">
               <div style={boxStyle}>
                 <CourseStatus />
               </div>

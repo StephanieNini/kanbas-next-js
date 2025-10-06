@@ -92,3 +92,15 @@ button svg {
   position: relative;
   top: 2px;                    /* 如仍略高，可改为 3px */
 }
+
+/* ===== Responsive hides: 3/4, 1/2, 1/4 ===== */
+@media (max-width: 1200px) {  /* 3/4：隐藏 Course Status */
+  .hide-at-3-4 { display: none !important; }
+}
+@media (max-width: 800px) {   /* 1/2：隐藏 Course Navigation */
+  .hide-at-1-2 { display: none !important; }
+}
+@media (max-width: 400px) {   /* 1/4：隐藏 Kambaz Sidebar */
+  .hide-at-1-4 { display: none !important; }
+}
+
