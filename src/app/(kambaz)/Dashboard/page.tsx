@@ -1,225 +1,79 @@
+"use client";
+
 import Link from "next/link";
-import {
-  Row,
-  Col,
-  Card,
-  CardImg,
-  CardBody,
-  CardTitle,
-  CardText,
-  Button,
-} from "react-bootstrap";
+import { Row, Col, Card, Button } from "react-bootstrap";
+
+type Course = {
+  id: string;
+  title: string;
+  desc: string;
+  img: string;
+};
+
+const COURSES: Course[] = [
+  { id: "1234", title: "CS1234 React JS", desc: "Full stack software developer", img: "/images/reactjs.jpg" },
+  { id: "2345", title: "CS2345 Algorithms", desc: "Divide & Conquer, Greedy, DP", img: "/images/reactjs.jpg" },
+  { id: "3456", title: "CS3456 Databases", desc: "SQL, ER, Normalization", img: "/images/reactjs.jpg" },
+  { id: "4567", title: "CS4567 Web Dev", desc: "HTML, CSS, JS, React, Next.js", img: "/images/reactjs.jpg" },
+  { id: "5678", title: "CS5678 Systems", desc: "Processes, Threads, Memory", img: "/images/reactjs.jpg" },
+  { id: "6789", title: "CS6789 Networks", desc: "TCP/IP, HTTP, Routing", img: "/images/reactjs.jpg" },
+  { id: "7890", title: "CS7890 AI", desc: "Search, ML, Probabilistic Models", img: "/images/reactjs.jpg" },
+];
 
 export default function Dashboard() {
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-      <h2 id="wd-dashboard-published">Published Courses (12)</h2> <hr />
+      <h1 id="wd-dashboard-title">Dashboard</h1>
+      <hr />
+      <h2 id="wd-dashboard-published">Published Courses ({COURSES.length})</h2>
+      <hr />
 
-      <div id="wd-dashboard-courses">
-        <Row xs={1} md={5} className="g-4">
-          {/* 1 */}
-          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
-            <Card>
+      {/* 让左侧导航与第一张卡片之间留白 32px；卡片之间的行/列间距也是 32px */}
+      <div id="wd-dashboard-courses" style={{ paddingLeft: 32 }}>
+        <Row
+          xs={1}
+          md={5}
+          className="g-0"
+          style={{ rowGap: 32, columnGap: 32 }}
+        >
+          {COURSES.map((c) => (
+            <Col
+              key={c.id}
+              className="wd-dashboard-course"
+              style={{ width: 300 }} // 固定宽度 ~300px，窗口变窄时自动换行
+            >
+              {/* 整张卡片都可点击，跳到该课程 Home 页面 */}
               <Link
-                href="/Courses/1234/Home"
+                href={`/Courses/${c.id}/Home`}
                 className="wd-dashboard-course-link text-decoration-none text-dark"
               >
-                <CardImg
-                  variant="top"
-                  width="100%"
-                  src="/images/reactjs.jpg"
-                  height={160}
-                />
-                <CardBody>
-                  <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                    CS1234 React JS
-                  </CardTitle>
-                  <CardText
-                    className="wd-dashboard-course-description overflow-hidden"
-                    style={{ height: "100px" }}
-                  >
-                    Full Stack software developer
-                  </CardText>
-                  <Button variant="primary">Go</Button>
-                </CardBody>
-              </Link>
-            </Card>
-          </Col>
+                <Card>
+                  <Card.Img variant="top" src={c.img} width="100%" height={160} />
+                  <Card.Body>
+                    <Card.Title
+                      className="wd-dashboard-course-title text-truncate"
+                      title={c.title}
+                    >
+                      {c.title}
+                    </Card.Title>
 
-          {/* 2 */}
-          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
-            <Card>
-              <Link
-                href="/Courses/2345/Home"
-                className="wd-dashboard-course-link text-decoration-none text-dark"
-              >
-                <CardImg
-                  variant="top"
-                  width="100%"
-                  src="/images/reactjs.jpg"
-                  height={160}
-                />
-                <CardBody>
-                  <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                    CS2345 Algorithms
-                  </CardTitle>
-                  <CardText
-                    className="wd-dashboard-course-description overflow-hidden"
-                    style={{ height: "100px" }}
-                  >
-                    Divide & Conquer, Greedy, DP
-                  </CardText>
-                  <Button variant="primary">Go</Button>
-                </CardBody>
-              </Link>
-            </Card>
-          </Col>
+                    <Card.Text
+                      className="wd-dashboard-course-description"
+                      style={{
+                        height: 100,
+                        overflow: "hidden",
+                      }}
+                      title={c.desc}
+                    >
+                      {c.desc}
+                    </Card.Text>
 
-          {/* 3 */}
-          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
-            <Card>
-              <Link
-                href="/Courses/3456/Home"
-                className="wd-dashboard-course-link text-decoration-none text-dark"
-              >
-                <CardImg
-                  variant="top"
-                  width="100%"
-                  src="/images/reactjs.jpg"
-                  height={160}
-                />
-                <CardBody>
-                  <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                    CS3456 Databases
-                  </CardTitle>
-                  <CardText
-                    className="wd-dashboard-course-description overflow-hidden"
-                    style={{ height: "100px" }}
-                  >
-                    SQL, ER, Normalization
-                  </CardText>
-                  <Button variant="primary">Go</Button>
-                </CardBody>
+                    <Button variant="primary">Go</Button>
+                  </Card.Body>
+                </Card>
               </Link>
-            </Card>
-          </Col>
-
-          {/* 4 */}
-          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
-            <Card>
-              <Link
-                href="/Courses/4567/Home"
-                className="wd-dashboard-course-link text-decoration-none text-dark"
-              >
-                <CardImg
-                  variant="top"
-                  width="100%"
-                  src="/images/reactjs.jpg"
-                  height={160}
-                />
-                <CardBody>
-                  <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                    CS4567 Web Dev
-                  </CardTitle>
-                  <CardText
-                    className="wd-dashboard-course-description overflow-hidden"
-                    style={{ height: "100px" }}
-                  >
-                    HTML, CSS, JS, React, Next.js
-                  </CardText>
-                  <Button variant="primary">Go</Button>
-                </CardBody>
-              </Link>
-            </Card>
-          </Col>
-
-          {/* 5 */}
-          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
-            <Card>
-              <Link
-                href="/Courses/5678/Home"
-                className="wd-dashboard-course-link text-decoration-none text-dark"
-              >
-                <CardImg
-                  variant="top"
-                  width="100%"
-                  src="/images/reactjs.jpg"
-                  height={160}
-                />
-                <CardBody>
-                  <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                    CS5678 Systems
-                  </CardTitle>
-                  <CardText
-                    className="wd-dashboard-course-description overflow-hidden"
-                    style={{ height: "100px" }}
-                  >
-                    Processes, Threads, Memory
-                  </CardText>
-                  <Button variant="primary">Go</Button>
-                </CardBody>
-              </Link>
-            </Card>
-          </Col>
-
-          {/* 6 */}
-          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
-            <Card>
-              <Link
-                href="/Courses/6789/Home"
-                className="wd-dashboard-course-link text-decoration-none text-dark"
-              >
-                <CardImg
-                  variant="top"
-                  width="100%"
-                  src="/images/reactjs.jpg"
-                  height={160}
-                />
-                <CardBody>
-                  <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                    CS6789 Networks
-                  </CardTitle>
-                  <CardText
-                    className="wd-dashboard-course-description overflow-hidden"
-                    style={{ height: "100px" }}
-                  >
-                    TCP/IP, HTTP, Routing
-                  </CardText>
-                  <Button variant="primary">Go</Button>
-                </CardBody>
-              </Link>
-            </Card>
-          </Col>
-
-          {/* 7 */}
-          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
-            <Card>
-              <Link
-                href="/Courses/7890/Home"
-                className="wd-dashboard-course-link text-decoration-none text-dark"
-              >
-                <CardImg
-                  variant="top"
-                  width="100%"
-                  src="/images/reactjs.jpg"
-                  height={160}
-                />
-                <CardBody>
-                  <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                    CS7890 AI
-                  </CardTitle>
-                  <CardText
-                    className="wd-dashboard-course-description overflow-hidden"
-                    style={{ height: "100px" }}
-                  >
-                    Search, ML, Probabilistic Models
-                  </CardText>
-                  <Button variant="primary">Go</Button>
-                </CardBody>
-              </Link>
-            </Card>
-          </Col>
+            </Col>
+          ))}
         </Row>
       </div>
     </div>

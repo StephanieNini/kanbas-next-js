@@ -1,3 +1,5 @@
+export default function Positions() {
+  return (
 <div id="wd-css-position-relative">
   <h2>Relative</h2>
   <div className="wd-bg-color-gray">
@@ -13,6 +15,7 @@
       Square</div>
   </div>
 
+<br></br>
   <div id="wd-css-position-absolute">
   <h2>Absolute position</h2>
   <div className="wd-pos-relative">
@@ -29,8 +32,8 @@
   </div>
 </div>
 
+<br></br>
 <div id="wd-css-position-fixed">
-  <h2>Fixed position</h2>
   <div className="wd-pos-fixed 
     wd-dimension-square wd-bg-color-blue 
     wd-fg-color-white">
@@ -39,3 +42,5 @@
 </div>
 
 </div>
+  )
+}

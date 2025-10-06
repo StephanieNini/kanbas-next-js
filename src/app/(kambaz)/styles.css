@@ -1,0 +1,94 @@
+body   {  margin: 0;  padding: 0;  }
+body * {  font-family: Arial, Helvetica, sans-serif;  }
+
+@media (min-width: 768px) {
+  #wd-kambaz .wd-main-content-offset {
+    padding-left: 140px !important;
+  }
+}
+
+body   {
+  margin: 0;
+  padding: 0;
+}
+
+body * {
+  font-family: Arial,
+  Helvetica, sans-serif;
+}
+
+@media (min-width: 768px) {
+  #wd-kambaz .wd-main-content-offset {
+    padding-left: 140px !important;
+  }
+}
+
+/* 激活状态下的链接样式 */
+.list-group.wd .list-group-item.active {
+  color: black !important;             /* 字体变黑 */
+  background-color: white !important;  /* 背景白色 */
+  border-left: 4px solid black !important; /* 左边竖线 */
+  border-top: none;
+  border-bottom: none;
+  border-right: none;
+}
+
+/* 普通状态下（未选中）的样式 */
+.list-group.wd .list-group-item {
+  color: #d32f2f; /* 红色文字 */
+  background-color: transparent;
+  border: none;
+}
+
+/* hover 时稍微加深 */
+.list-group.wd .list-group-item:hover {
+  color: black;
+  background-color: #f8f9fa;
+}
+
+body { margin: 0;  padding: 0; }
+body * { font-family:
+         Arial, Helvetica, 
+         sans-serif; }
+@media (min-width: 768px) {
+  #wd-kambaz .wd-main-content-offset {
+    padding-left: 140px !important;
+  }
+}
+
+.btn-secondary {
+  --bs-btn-color: #000 !important;
+  --bs-btn-bg: #c7cdd1 !important;
+  --bs-btn-border-color: #c7cdd1 !important;
+  --bs-btn-hover-color: #fff !important;
+}
+.bg-secondary {
+  --bs-secondary-rgb: 199, 205, 209;
+}
+.list-group-item {
+  --bs-list-group-border-color: gray;
+}
+.wd-lesson {
+  border-left: 3px solid green !important;
+}
+
+button svg {
+  vertical-align: middle;
+  margin-top: -2px;
+}
+
+/* 让行内图标和文字在一条基线上 */
+.wd-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.wd-icon > svg {
+  display: block;              /* 去掉 svg 自带的行高影响 */
+}
+
+/* 专门给 BsGripVertical 一点下移，1-3px 之间微调到你看着最顺眼 */
+.wd-icon--grip {
+  position: relative;
+  top: 2px;                    /* 如仍略高，可改为 3px */
+}

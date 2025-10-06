@@ -1,23 +1,41 @@
-import { ReactNode } from "react";
-import { FaAlignJustify } from "react-icons/fa";
 import CourseNavigation from "./Navigation";
-export default async function CoursesLayout(
-  { children, params }:
-    Readonly<{ children: ReactNode;
-    params: Promise<{ cid: string }> }>) {
- const { cid } = await params;
-return (
-<div id="wd-courses">
-  <h2 className="text-danger">
-      <FaAlignJustify className="me-4 fs-4 mb-1" />
-      Course {cid} </h2> <hr />
-  <div className="d-flex">
-    <div className="d-none d-sm-block">
-      <CourseNavigation />
-    </div>
-    <div className="flex-fill">
-      {children}
-    </div></div>
-</div>
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@/app/(kambaz)/styles.css";
 
-);}
+export default function CourseLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      id="wd-course-layout"
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        minHeight: "100vh",
+        backgroundColor: "white",
+      }}
+    >
+      {/* 第二栏：课程导航 */}
+      <div
+        className="d-none d-lg-block"
+        style={{
+          width: "200px",
+          borderRight: "1px solid #dee2e6",
+          backgroundColor: "white",
+          top: 0,
+          bottom: 0,
+          left: "150px", 
+          paddingTop: "20px",
+          zIndex: 5, 
+        }}
+      >
+        <CourseNavigation />
+      </div>
+
+      {/* 第三栏：右侧内容 */}
+      <div style={{ flex: 1, padding: "20px" }}>{children}</div>
+    </div>
+  );
+}

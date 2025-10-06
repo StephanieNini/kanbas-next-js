@@ -1,11 +1,13 @@
+"use client";
 import Modules from '../Modules/page';
+
 import CourseStatus from './Status';
 
 export default function Home() {
   return (
     <div id="wd-home" style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       {/* TITLE */}
-      <h2 style={{ marginBottom: '10px' }}>CS4550 Web Development</h2>
+      <h2 style={{ marginBottom: '10px' }}>CS5610 Web Development</h2>
 
       {/* TOP BUTTON GROUP */}
       <div style={{ marginBottom: '20px' }}>

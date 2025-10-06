@@ -1,11 +1,23 @@
 import { ReactNode } from "react";
 import KambazNavigation from "./Navigation";
 
-export default function KambazLayout({ children }: Readonly<{ children: ReactNode }>) {
+interface KambazLayoutProps {
+  children: ReactNode;
+}
+
+export default function KambazLayout({ children }: KambazLayoutProps) {
   return (
-    <div className="d-flex" style={{ minHeight: "100vh" }}>
-      <KambazNavigation />
-      <main className="flex-fill p-3">{children}</main>
+    <div id="wd-kambaz">
+      <div className="d-flex">
+        <div style={{ width: "200px" }}>
+          <KambazNavigation />
+        </div>
+
+        {/* 右侧内容区 */}
+        <div className="wd-main-content-offset p-3 flex-fill">
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

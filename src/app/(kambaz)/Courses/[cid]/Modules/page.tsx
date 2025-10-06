@@ -1,64 +1,113 @@
+"use client";
+import ModulesControls from "./ModulesControls";
+import { ListGroup, ListGroupItem } from "react-bootstrap";
+import { BsGripVertical } from "react-icons/bs";
+import LessonControlButtons from "./LessonControlButtons";
+import ModuleControlButtons from "./ModuleControlButtons";
+
 export default function Modules() {
   return (
-    <div id="wd-modules">
-      {/*Collapse、View Progress、Publish All、+Module*/}
-      <div>
-        <button>Collapse All</button>
-        <button>View Progress</button>
-        <button>Publish All</button>
-        <button>+ Module</button>
-      </div>
+    <div>
+      <ModulesControls />
+      <br />
+      <br />
+      <br />
 
-      <ul>
-        {/* Module 1 */}
-        <li className="wd-module">
-          <div className="wd-title">Week 1</div>
-          <ul className="wd-lessons">
-            <li className="wd-lesson">
-              <span className="wd-title">LEARNING OBJECTIVES</span>
-              <ul className="wd-content">
-                <li className="wd-content-item">Introduction to the course</li>
-                <li className="wd-content-item">Learn what is Web Development</li>
-              </ul>
-            </li>
-            <li className="wd-lesson">
-              <span className="wd-title">Full Stack Developer - Chapter 1</span>
-            </li>
-            <li className="wd-lesson">
-              <span className="wd-title">Full Stack Developer - Chapter 2: Creating User Interfaces With HTML</span>
-            </li>
-            <li className="wd-lesson">
-              <span className="wd-title">Slides</span>
-            </li>
-            <li className="wd-lesson">
-              <span className="wd-title">Introduction to Web Development</span>
-            </li>
-          </ul>
-        </li>
+      <ListGroup className="rounded-0" id="wd-modules">
+        {/* ========== Week 1 模块 ========== */}
+        <ListGroupItem className="wd-module p-0 mb-5 fs-5 border-gray">
+          {/* 模块标题 */}
+          <div className="wd-title p-3 ps-2 bg-secondary d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center">
+              <span className="wd-icon wd-icon--grip me-2">
+                <BsGripVertical className="fs-4 text-muted" />
+              </span>
+              <span>Week 1</span>
+            </div>
+            <ModuleControlButtons />
+          </div>
 
-        {/* Module 2 */}
-        <li className="wd-module">
-          <div className="wd-title">Week 2</div>
-          <ul className="wd-lessons">
-            <li className="wd-lesson">
-              <span className="wd-title">HTML Basics</span>
-            </li>
-            <li className="wd-lesson">
-              <span className="wd-title">More HTML Elements</span>
-            </li>
-          </ul>
-        </li>
+          {/* Week 1 课程内容 */}
+          <ListGroup className="wd-lessons rounded-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1 d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center">
+                <span className="wd-icon wd-icon--grip me-2">
+                  <BsGripVertical className="fs-4 text-muted" />
+                </span>
+                <span>LEARNING OBJECTIVES</span>
+              </div>
+              <LessonControlButtons />
+            </ListGroupItem>
 
-        {/* Module 3 */}
-        <li className="wd-module">
-          <div className="wd-title">Week 3</div>
-          <ul className="wd-lessons">
-            <li className="wd-lesson">
-              <span className="wd-title">CSS Introduction</span>
-            </li>
-          </ul>
-        </li>
-      </ul>
+            <ListGroupItem className="wd-lesson p-3 ps-1 d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center">
+                <span className="wd-icon wd-icon--grip me-2">
+                  <BsGripVertical className="fs-4 text-muted" />
+                </span>
+                <span>Introduction to the course</span>
+              </div>
+              <LessonControlButtons />
+            </ListGroupItem>
+
+            <ListGroupItem className="wd-lesson p-3 ps-1 d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center">
+                <span className="wd-icon wd-icon--grip me-2">
+                  <BsGripVertical className="fs-4 text-muted" />
+                </span>
+                <span>Setting up the development environment</span>
+              </div>
+              <LessonControlButtons />
+            </ListGroupItem>
+          </ListGroup>
+        </ListGroupItem>
+
+        {/* ========== Week 2 模块 ========== */}
+        <ListGroupItem className="wd-module p-0 mb-5 fs-5 border-gray">
+          {/* 模块标题 */}
+          <div className="wd-title p-3 ps-2 bg-secondary d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center">
+              <span className="wd-icon wd-icon--grip me-2">
+                <BsGripVertical className="fs-4 text-muted" />
+              </span>
+              <span>Week 2</span>
+            </div>
+            <ModuleControlButtons />
+          </div>
+
+          {/* Week 2 课程内容 */}
+          <ListGroup className="wd-lessons rounded-0">
+            <ListGroupItem className="wd-lesson p-3 ps-1 d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center">
+                <span className="wd-icon wd-icon--grip me-2">
+                  <BsGripVertical className="fs-4 text-muted" />
+                </span>
+                <span>HTML Basics</span>
+              </div>
+              <LessonControlButtons />
+            </ListGroupItem>
+
+            <ListGroupItem className="wd-lesson p-3 ps-1 d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center">
+                <span className="wd-icon wd-icon--grip me-2">
+                  <BsGripVertical className="fs-4 text-muted" />
+                </span>
+                <span>CSS Fundamentals</span>
+              </div>
+              <LessonControlButtons />
+            </ListGroupItem>
+
+            <ListGroupItem className="wd-lesson p-3 ps-1 d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center">
+                <span className="wd-icon wd-icon--grip me-2">
+                  <BsGripVertical className="fs-4 text-muted" />
+                </span>
+                <span>Working with Layouts</span>
+              </div>
+              <LessonControlButtons />
+            </ListGroupItem>
+          </ListGroup>
+        </ListGroupItem>
+      </ListGroup>
     </div>
   );
 }
