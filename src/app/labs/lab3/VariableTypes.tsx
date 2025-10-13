@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 export default function VariableTypes() {
   let numberVariable = 123;
   let floatingPointNumber = 234.345;
@@ -17,4 +18,5 @@ export default function VariableTypes() {
       isString = { isString }<br/>
       isBoolean = { isBoolean }<hr/>
     </div>
-);}
+);
+}
