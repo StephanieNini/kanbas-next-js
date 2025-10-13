@@ -24,12 +24,20 @@ import Destructing from "./Destructing";
 import FunctionDestructing from "./FunctionDestructing";
 import DestructingImports from "./DestructingImports";
 import JsonTodo from "./JsonTodo";
-import JsonTodoItem from "./JsonTodoItem";
+import Classes from "./Classes";
+import Styles from "./Styles";
+import Add from "./Add";
+import Square from "./Square";
+import Highlight from "./Hightlight";
+import PathParameters from "./PathParameters";
+import TodoItem from "./todos/TodoItem";
+import TodoList from "./todos/TodoList";
 
 export default function Lab3() {
+  console.log("Hello World!");
   return (
     <div id="wd-lab3">
-      <h3>Lab 3</h3>
+      <h3>Lab 3 - JavaScript</h3>
       <VariablesAndConstants />
       <VariableTypes />
       <BooleanVariables />
@@ -56,6 +64,19 @@ export default function Lab3() {
       <Destructing />
       <FunctionDestructing />
       <DestructingImports />
+      <Classes />
+      <Styles />
+      <Add a={3} b={4} />
+      <Square>4</Square> <hr/>
+      <Highlight>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe totam
+        vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
+      </Highlight>    
+      <PathParameters />  
+      <TodoItem /> <hr/>
+      <TodoList />
+      
+
     </div>
   );
 }

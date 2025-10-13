@@ -1,9 +1,9 @@
 const todos = [
-  { id: 1, task: "Finish Lab 3 assignment", done: true },
-  { id: 2, task: "Review JavaScript destructuring", done: true },
-  { id: 3, task: "Implement a simple ToDo List", done: false },
-  { id: 4, task: "Submit lab to the course portal", done: false },
-];
+  { "title": "Buy milk",          "status": "CANCELED",     "done": true   },
+  { "title": "Pickup the kids",   "status": "IN PROGRESS",  "done": false  },
+  { "title": "Walk the dog",      "status": "DEFERRED",     "done": false  }
+]
+
 
 export default function JsonTodo() {
   return (
@@ -11,11 +11,11 @@ export default function JsonTodo() {
       <h3>JSON ToDo List</h3>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>
-            {todo.task} - {todo.done ? "Done" : "Not Done"}
+          <li key={todo.title}>
+            {todo.title} - {todo.status} - {todo.done ? "Done" : "Not Done"}
           </li>
         ))}
-      </ul>
+      </ul><hr/>
     </div>
   );
 }
