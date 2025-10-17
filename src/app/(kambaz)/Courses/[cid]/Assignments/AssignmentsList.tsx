@@ -30,7 +30,7 @@ function AssignmentRow({
           {/* 任务图标 */}
           <MdAssignment className="fs-5 text-secondary me-2" />
 
-          {/* ✅ 改成 Link，不改样式 */}
+          {/* 改成 Link，不改样式 */}
           <Link
             href={`/Courses/${cid}/Assignments/${title}`}
             className="fw-semibold text-decoration-none text-dark"
