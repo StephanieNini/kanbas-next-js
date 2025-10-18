@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { courses } from "../../Database";
 import CourseNavigation from "./Navigation";
 import Breadcrumb from "./breadcrumb";
