@@ -1,17 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { courses } from "../../Database";
 import CourseNavigation from "./Navigation";
 import { notFound } from "next/navigation";
-import { FaAlignJustify } from 'react-icons/fa';
+import { FaAlignJustify } from "react-icons/fa";
 
-export default function CourseLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { cid: string };
-}) {
-  const { cid } = params;
-  const course = courses.find((c) => c._id === cid);
+export default function CourseLayout(props: any) {
+  const { children, params } = props;
+  const cid = params?.cid;
+
+  const course = courses.find((c: any) => c._id === cid);
   if (!course) notFound();
 
   return (
@@ -24,7 +21,7 @@ export default function CourseLayout({
         minHeight: "100vh",
       }}
     >
-      {/* 左侧课程导航栏（带响应式隐藏） */}
+      {/* ✅ 左侧课程导航栏（响应式隐藏 + 与主导航贴齐） */}
       <div
         className="wd-course-nav hide-at-1-2"
         style={{
@@ -32,7 +29,7 @@ export default function CourseLayout({
           borderRight: "1px solid #dee2e6",
           background: "white",
           padding: "20px",
-          marginLeft: "-200px", // 贴紧左侧主导航
+          marginLeft: "-200px",
         }}
       >
         <h4 className="text-danger" style={{ marginBottom: "20px" }}>
@@ -44,7 +41,7 @@ export default function CourseLayout({
         <CourseNavigation />
       </div>
 
-      {/* 右侧课程内容区域 */}
+      {/* ✅ 右侧课程内容区域 */}
       <div style={{ flex: 1, padding: "30px" }}>{children}</div>
     </div>
   );
