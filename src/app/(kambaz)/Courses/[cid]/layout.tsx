@@ -10,7 +10,8 @@ export default function CourseLayout({
   children: React.ReactNode;
   params: { cid: string };
 }) {
-  const course = courses.find((c) => c._id === params.cid);
+  const { cid } = params;
+  const course = courses.find((c) => c._id === cid);
   if (!course) notFound();
 
   return (
