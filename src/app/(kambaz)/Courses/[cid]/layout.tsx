@@ -3,14 +3,14 @@ import CourseNavigation from "./Navigation";
 import { notFound } from "next/navigation";
 import { FaAlignJustify } from 'react-icons/fa';
 
-export default function CourseLayout({
+export default async function CourseLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
   params: { cid: string };
 }) {
-  const { cid } = params;
+  const { cid } = await params;
   const course = courses.find((c) => c._id === cid);
   if (!course) notFound();
 
