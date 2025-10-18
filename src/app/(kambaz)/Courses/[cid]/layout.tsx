@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { courses } from "../../Database";
 import CourseNavigation from "./Navigation";
+import Breadcrumb from "./breadcrumb";
 import { notFound } from "next/navigation";
 import { FaAlignJustify } from "react-icons/fa";
 
 export default function CourseLayout(props: any) {
   const { children, params } = props;
   const cid = params?.cid;
-
   const course = courses.find((c: any) => c._id === cid);
   if (!course) notFound();
 
@@ -16,33 +15,52 @@ export default function CourseLayout(props: any) {
       id="wd-course-layout"
       style={{
         display: "flex",
-        flexDirection: "row",
-        backgroundColor: "white",
+        flexDirection: "column", //顶部 + 主体分区
         minHeight: "100vh",
+        backgroundColor: "white",
       }}
     >
-      {/* ✅ 左侧课程导航栏（响应式隐藏 + 与主导航贴齐） */}
+      {/* 顶部 Breadcrumb（横跨两区） */}
       <div
-        className="wd-course-nav hide-at-1-2"
+        className="d-flex align-items-center gap-3 text-danger"
         style={{
-          width: "220px",
-          borderRight: "1px solid #dee2e6",
-          background: "white",
-          padding: "20px",
+          borderBottom: "1px solid #dee2e6",
+          padding: "15px 30px",
+          fontWeight: "500",
+          fontSize: "18px",
           marginLeft: "-200px",
         }}
       >
-        <h4 className="text-danger" style={{ marginBottom: "20px" }}>
-          <div className="d-flex align-items-center gap-3">
-            <FaAlignJustify />
-            {course.name}
-          </div>
-        </h4>
-        <CourseNavigation />
+        <FaAlignJustify />
+        <Breadcrumb course={course} />
       </div>
 
-      {/* ✅ 右侧课程内容区域 */}
-      <div style={{ flex: 1, padding: "30px" }}>{children}</div>
+      {/* 主体部分：左导航 + 右内容 */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          flex: 1,
+          backgroundColor: "white",
+        }}
+      >
+        {/* 左侧导航栏 */}
+        <div
+          className="wd-course-nav hide-at-1-2"
+          style={{
+            width: "220px",
+            borderRight: "1px solid #dee2e6",
+            background: "white",
+            padding: "20px",
+            marginLeft: "-200px",
+          }}
+        >
+          <CourseNavigation cid={cid} />
+        </div>
+
+        {/* 右侧课程内容 */}
+        <div style={{ flex: 1, padding: "30px" }}>{children}</div>
+      </div>
     </div>
   );
 }
