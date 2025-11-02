@@ -11,6 +11,7 @@ export default function Lab1() {
   <li><Link href="/labs/lab1">Lab 1</Link></li>
   <li><Link href="/labs/lab2">Lab 2</Link></li>
   <li><Link href="/labs/lab3">Lab 3</Link></li>
+  <li><Link href="/labs/lab4">Lab 4</Link></li>
   <li><Link href="/">Kambaz Application</Link></li>
   <li>
     <a href="https://github.com/StephanieNini/kambaz-next-js" target="_blank">

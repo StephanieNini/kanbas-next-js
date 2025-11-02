@@ -8,5 +8,5 @@ import todosReducer from "./ReduxExamples/todos/todosReducer";
 const store = configureStore({
   reducer: { helloReducer, counterReducer, addReducer, todosReducer },
 });
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof store.getState>
 export default store;

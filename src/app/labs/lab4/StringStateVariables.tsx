@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FormControl } from "react-bootstrap";
 export default function StringStateVariables() {
-  const [firstName, setFirstName] = useState("John");
+  const [firstName, setFirstName] = useState("John Doe");
   return (
     <div>
       <h2>String State Variables</h2>
