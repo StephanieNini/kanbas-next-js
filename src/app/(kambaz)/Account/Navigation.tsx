@@ -4,11 +4,16 @@ import { usePathname } from "next/navigation";
 // 复用你已有的样式（和课程导航一样）
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/app/(kambaz)/styles.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 export default function AccountNavigation() {
   const pathname = usePathname();
   const isActive = (path: string) =>
     pathname?.toLowerCase().startsWith(path.toLowerCase());
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
+
 
   return (
     <div

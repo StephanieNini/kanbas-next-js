@@ -1,15 +1,19 @@
+"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { courses } from "../../Database";
 import CourseNavigation from "./Navigation";
 import Breadcrumb from "./breadcrumb";
 import { notFound } from "next/navigation";
 import { FaAlignJustify } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { useParams } from "next/navigation";
+import { RootState } from "../../store";
+import { ReactNode } from "react";
 
-export default function CourseLayout(props: any) {
-  const { children, params } = props;
-  const cid = params?.cid;
-  const course = courses.find((c: any) => c._id === cid);
-  if (!course) notFound();
+export default function CourseLayout({ children }: { children: ReactNode }) {
+ const { cid } = useParams();
+ const { courses } = useSelector((state: RootState) => state.coursesReducer);
+ const course = courses.find((course: any) => course._id === cid);
 
   return (
     <div
@@ -33,7 +37,7 @@ export default function CourseLayout(props: any) {
         }}
       >
         <FaAlignJustify />
-        <Breadcrumb course={course} />
+        {course ? <Breadcrumb course={course} /> : null}
       </div>
 
       {/* 主体部分：左导航 + 右内容 */}
@@ -56,7 +60,7 @@ export default function CourseLayout(props: any) {
             marginLeft: "-200px",
           }}
         >
-          <CourseNavigation cid={cid} />
+          {cid ? <CourseNavigation cid={Array.isArray(cid) ? cid[0] : cid} /> : null}
         </div>
 
         {/* 右侧课程内容 */}

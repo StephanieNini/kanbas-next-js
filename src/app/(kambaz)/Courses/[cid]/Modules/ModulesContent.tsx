@@ -18,8 +18,6 @@ export default function ModulesContent() {
             Week 1
           </div>
 
-          {/* 右侧图标组 */}
-          <ModuleControlButtons />
         </div>
 
         {/* Lessons */}

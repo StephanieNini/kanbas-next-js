@@ -1,34 +1,49 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* ts-nocheck */
 "use client";
-import { useParams } from "next/navigation";
-import * as db from "../../../Database";
-import AssignmentsControls from "./AssignmentsControls";
-import { ListGroup, ListGroupItem } from "react-bootstrap";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { useParams, useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../store";
+import { deleteAssignment } from "./reducer";
+
+import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { BsGripVertical, BsThreeDotsVertical } from "react-icons/bs";
 import { MdAssignment } from "react-icons/md";
-import LessonControlButtons from "../Modules/LessonControlButtons";
+import AssignmentsControls from "./AssignmentsControls";
 import Link from "next/link";
 
 export default function AssignmentsPage() {
-  // ✅ 获取当前课程 ID
   const { cid } = useParams();
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-  // ✅ 获取所有作业
-  const assignments = db.assignments;
+  // 从 Redux 中获取 assignments
+  const { assignments } = useSelector(
+    (state: RootState) => state.assignmentsReducer
+  );
 
-  // ✅ 过滤出当前课程对应的作业
+  // 过滤出当前课程的作业
   const currentAssignments = assignments.filter(
     (assignment: any) => assignment.course === cid
   );
 
+  // 删除作业（带确认）
+  const handleDelete = (assignmentId: string) => {
+    if (confirm("Are you sure you want to delete this assignment?")) {
+      dispatch(deleteAssignment(assignmentId));
+    }
+  };
+
   return (
-    <div id="wd-assignments-page" className="p-2">
+    <div id="wd-assignments-page" className="p-3">
+      {/* 顶部 +Assignment 控制栏 */}
       <AssignmentsControls />
+
       <br />
 
       <ListGroup className="rounded-0" id="wd-assignments">
         <ListGroupItem className="p-0 mb-3 fs-5 border-gray">
+          {/* 作业标题栏 */}
           <div className="p-3 ps-2 bg-secondary d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center">
               <BsGripVertical className="fs-4 text-muted me-2" />
@@ -40,11 +55,11 @@ export default function AssignmentsPage() {
             </div>
           </div>
 
-          {/* ✅ 动态渲染每个作业 */}
+          {/* ✅ 动态渲染列表 */}
           <ListGroup className="rounded-0">
             {currentAssignments.map((assignment: any) => (
               <ListGroupItem
-                key={assignment._id + assignment.course}
+                key={assignment._id}
                 className="p-3 ps-1 d-flex align-items-center justify-content-between"
                 style={{ borderLeft: "3px solid green" }}
               >
@@ -52,6 +67,8 @@ export default function AssignmentsPage() {
                   <div className="d-flex align-items-center">
                     <BsGripVertical className="fs-4 text-muted me-2" />
                     <MdAssignment className="fs-5 text-secondary me-2" />
+
+                    {/* ✅ 点击标题跳转编辑页 */}
                     <Link
                       href={`/Courses/${cid}/Assignments/${assignment._id}`}
                       className="fw-semibold text-decoration-none text-dark"
@@ -59,9 +76,20 @@ export default function AssignmentsPage() {
                       {assignment.title}
                     </Link>
                   </div>
-                  <div className="text-muted small ms-4">{assignment.meta}</div>
+
+                  <div className="text-muted small ms-4">
+                    Due {assignment.dueDate} | {assignment.points} pts
+                  </div>
                 </div>
-                <LessonControlButtons />
+
+                {/* ✅ 删除按钮 */}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDelete(assignment._id)}
+                >
+                  Delete
+                </Button>
               </ListGroupItem>
             ))}
           </ListGroup>
