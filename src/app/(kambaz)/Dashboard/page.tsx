@@ -33,7 +33,7 @@ export default function Dashboard() {
     description: "New Description",
   });
   
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer) || ({} as { _id: string | undefined });
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer) as any;
   const { enrollments } = db;
 
 
@@ -99,10 +99,10 @@ export default function Dashboard() {
 {courses
   .filter((course: any) =>
     enrollments.some(
-      (enrollment: any) =>
-        enrollment.user === currentUser?._id &&
-        enrollment.course === course._id
-    )
+  (enrollment: any) =>
+    enrollment.user === currentUser?._id &&
+    enrollment.course === course._id
+)
   )
   .map((c: any) => (
             <Col className="wd-dashboard-course" style={{ width: "300px" }}>
