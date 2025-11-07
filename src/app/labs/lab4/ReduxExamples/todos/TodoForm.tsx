@@ -13,7 +13,7 @@ export default function TodoForm() {
       <Button onClick={() => dispatch(updateTodo(todo))}
               id="wd-update-todo-click"> Update </Button>
       <FormControl
-        defaultValue={todo.title}
+        value={todo.title}
         onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))}/>
     </ListGroupItem>
   );
