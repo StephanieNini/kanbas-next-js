@@ -1,11 +1,18 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../store";
-import { deleteAssignment } from "./reducer";
 
+import {
+  setAssignments,
+  deleteAssignmentLocal,
+} from "./reducer";
+
+import * as client from "./client";
+
+import { useEffect } from "react";
 import { ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { BsGripVertical, BsThreeDotsVertical } from "react-icons/bs";
 import { MdAssignment } from "react-icons/md";
@@ -14,36 +21,54 @@ import Link from "next/link";
 
 export default function AssignmentsPage() {
   const { cid } = useParams();
-  const router = useRouter();
   const dispatch = useDispatch();
 
-  // 从 Redux 中获取 assignments
   const { assignments } = useSelector(
     (state: RootState) => state.assignmentsReducer
   );
 
-  // 过滤出当前课程的作业
-  const currentAssignments = assignments.filter(
-    (assignment: any) => assignment.course === cid
-  );
-
-  // 删除作业（带确认）
-  const handleDelete = (assignmentId: string) => {
-    if (confirm("Are you sure you want to delete this assignment?")) {
-      dispatch(deleteAssignment(assignmentId));
-    }
+  // ===============================
+  // 1. 页面加载时从服务器加载作业
+  // ===============================
+  const fetchAssignments = async () => {
+    if (!cid) return;
+    const data = await client.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(data));
   };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, [cid]);
+
+
+  // ===============================
+  // 2. 删除作业
+  // ===============================
+  const handleDelete = async (assignmentId: string) => {
+    if (!confirm("Are you sure you want to delete this assignment?")) return;
+
+    await client.deleteAssignment(assignmentId);
+    dispatch(deleteAssignmentLocal(assignmentId));
+  };
+
+
+  // ===============================
+  // 3. 当前课程的作业
+  // ===============================
+  const currentAssignments = assignments.filter(
+    (a: any) => a.course === cid
+  );
 
   return (
     <div id="wd-assignments-page" className="p-3">
-      {/* 顶部 +Assignment 控制栏 */}
-      <AssignmentsControls />
+      <AssignmentsControls cid={cid} refresh={fetchAssignments} />
 
       <br />
 
       <ListGroup className="rounded-0" id="wd-assignments">
         <ListGroupItem className="p-0 mb-3 fs-5 border-gray">
-          {/* 作业标题栏 */}
+
+          {/* 顶部标题 */}
           <div className="p-3 ps-2 bg-secondary d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center">
               <BsGripVertical className="fs-4 text-muted me-2" />
@@ -55,7 +80,7 @@ export default function AssignmentsPage() {
             </div>
           </div>
 
-          {/* ✅ 动态渲染列表 */}
+          {/* 作业列表 */}
           <ListGroup className="rounded-0">
             {currentAssignments.map((assignment: any) => (
               <ListGroupItem
@@ -68,7 +93,6 @@ export default function AssignmentsPage() {
                     <BsGripVertical className="fs-4 text-muted me-2" />
                     <MdAssignment className="fs-5 text-secondary me-2" />
 
-                    {/* ✅ 点击标题跳转编辑页 */}
                     <Link
                       href={`/Courses/${cid}/Assignments/${assignment._id}`}
                       className="fw-semibold text-decoration-none text-dark"
@@ -82,7 +106,6 @@ export default function AssignmentsPage() {
                   </div>
                 </div>
 
-                {/* ✅ 删除按钮 */}
                 <Button
                   variant="danger"
                   size="sm"

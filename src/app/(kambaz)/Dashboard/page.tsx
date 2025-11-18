@@ -1,10 +1,13 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-key */
+
 import { useDispatch, useSelector } from "react-redux";
-import { addNewCourse, deleteCourse, updateCourse, setCourses } from "../Courses/[cid]/reducer";
-import * as db from "../Database";
+import {
+  setCourses,
+} from "../Courses/[cid]/reducer";
 import { RootState } from "../store";
+import * as client from "../Courses/client";
 
 import {
   Card,
@@ -17,12 +20,22 @@ import {
   Col,
   FormControl,
 } from "react-bootstrap";
+
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const courses = useSelector((state: RootState) => state.coursesReducer.courses);
+
+  const courses = useSelector(
+    (state: RootState) => state.coursesReducer.courses
+  );
+
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer
+  ) as any;
+
+  // 新课程输入框
   const [course, setCourse] = useState<any>({
     _id: "0",
     name: "New Course",
@@ -32,43 +45,72 @@ export default function Dashboard() {
     image: "/images/reactjs.jpg",
     description: "New Description",
   });
-  
-  const { currentUser } = useSelector((state: RootState) => state.accountReducer) as any;
-  const { enrollments } = db;
 
-
-  // === 按钮操作 ===
-  const handleAddCourse = () => {
-    dispatch(addNewCourse(course));
+  // ======== 从 server 获取当前用户课程 ========
+  const fetchCourses = async () => {
+    if (!currentUser) return;
+    try {
+      const myCourses = await client.findMyCourses(); // only enrolled courses
+      dispatch(setCourses(myCourses));
+    } catch (err) {
+      console.error("Error loading courses:", err);
+    }
   };
 
-  const handleUpdateCourse = () => {
-    dispatch(updateCourse(course));
+  useEffect(() => {
+    fetchCourses();
+  }, [currentUser]);
+
+  // =================================================
+  // ========== 新增课程（server + redux） ============
+  // =================================================
+  const onAddNewCourse = async () => {
+    const newCourse = await client.createCourse(course);
+    dispatch(setCourses([...courses, newCourse]));
   };
 
-  const handleDeleteCourse = (courseId: string, event: any) => {
-    event.preventDefault();
-    event.stopPropagation();
-    dispatch(deleteCourse(courseId));
+  // =================================================
+  // ========== 删除课程（server + redux） ============
+  // =================================================
+  const onDeleteCourse = async (courseId: string) => {
+    await client.deleteCourse(courseId);
+    dispatch(setCourses(courses.filter((c: any) => c._id !== courseId)));
+  };
+
+  // =================================================
+  // ========== 更新课程（server + redux） ============
+  // =================================================
+  const onUpdateCourse = async () => {
+    await client.updateCourse(course);
+    dispatch(
+      setCourses(
+        courses.map((c: any) =>
+          c._id === course._id ? course : c
+        )
+      )
+    );
   };
 
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1>
       <hr />
+
+      {/* ===================== New Course 区域 ===================== */}
       <h5>
         New Course
         <button
           className="btn btn-primary float-end"
           id="wd-add-new-course-click"
-          onClick={handleAddCourse}
+          onClick={onAddNewCourse}
         >
           Add
         </button>
+
         <button
+          onClick={onUpdateCourse}
           className="btn btn-warning float-end me-2"
           id="wd-update-course-click"
-          onClick={handleUpdateCourse}
         >
           Update
         </button>
@@ -89,23 +131,22 @@ export default function Dashboard() {
       />
 
       <hr />
+
       <h2 id="wd-dashboard-published">
         Published Courses ({courses.length})
       </h2>
+
       <hr />
 
+      {/* ======================== Courses 列表 ======================== */}
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-{courses
-  .filter((course: any) =>
-    enrollments.some(
-  (enrollment: any) =>
-    enrollment.user === currentUser?._id &&
-    enrollment.course === course._id
-)
-  )
-  .map((c: any) => (
-            <Col className="wd-dashboard-course" style={{ width: "300px" }}>
+          {courses.map((c: any) => (
+            <Col
+              key={c._id}
+              className="wd-dashboard-course"
+              style={{ width: "300px" }}
+            >
               <Card>
                 <CardImg
                   src={c.image || "/images/reactjs.jpg"}
@@ -114,7 +155,6 @@ export default function Dashboard() {
                   height={160}
                 />
                 <CardBody>
-                  {/* 课程标题加链接 */}
                   <Link
                     href={`/Courses/${c._id}/Home`}
                     className="wd-dashboard-course-link text-decoration-none text-dark"
@@ -131,12 +171,11 @@ export default function Dashboard() {
                     {c.description}
                   </CardText>
 
-                  {/* Go 按钮 */}
                   <Button variant="primary" href={`/Courses/${c._id}/Home`}>
                     Go
                   </Button>
 
-                  {/* Edit 按钮 */}
+                  {/* Edit */}
                   <button
                     className="btn btn-warning float-end me-2"
                     onClick={(event) => {
@@ -148,10 +187,14 @@ export default function Dashboard() {
                     Edit
                   </button>
 
-                  {/* Delete 按钮 */}
+                  {/* Delete */}
                   <button
                     className="btn btn-danger float-end"
-                    onClick={(event) => handleDeleteCourse(c._id, event)}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      onDeleteCourse(c._id);
+                    }}
                   >
                     Delete
                   </button>
