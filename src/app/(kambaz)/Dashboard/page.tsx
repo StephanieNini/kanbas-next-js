@@ -196,6 +196,7 @@ export default function Dashboard() {
                       onDeleteCourse(c._id);
                     }}
                   >
+                    
                     Delete
                   </button>
                 </CardBody>
