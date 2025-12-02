@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-key */
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setCourses,
-} from "../Courses/[cid]/reducer";
+import { setCourses } from "../Courses/[cid]/reducer";
 import { RootState } from "../store";
 import * as client from "../Courses/client";
 
@@ -35,7 +34,7 @@ export default function Dashboard() {
     (state: RootState) => state.accountReducer
   ) as any;
 
-  // 新课程输入框
+  // 保留你的默认课程输入模板
   const [course, setCourse] = useState<any>({
     _id: "0",
     name: "New Course",
@@ -46,57 +45,95 @@ export default function Dashboard() {
     description: "New Description",
   });
 
-  // ======== 从 server 获取当前用户课程 ========
-  const fetchCourses = async () => {
+  // =========================
+  // Enrollment states
+  // =========================
+  const [showAll, setShowAll] = useState(false);
+  const [allCourses, setAllCourses] = useState<any[]>([]);
+
+  // 获取已 Enroll 课程
+  const fetchMyCourses = async () => {
     if (!currentUser) return;
-    try {
-      const myCourses = await client.findMyCourses(); // only enrolled courses
-      dispatch(setCourses(myCourses));
-    } catch (err) {
-      console.error("Error loading courses:", err);
-    }
+    const my = await client.findMyCourses();
+    dispatch(setCourses(my));
+  };
+
+  // 获取全部课程
+  const fetchAllCourses = async () => {
+    const ac = await client.fetchAllCourses();
+    setAllCourses(ac);
   };
 
   useEffect(() => {
-    fetchCourses();
+    if (!currentUser) return;
+    fetchMyCourses();
+    fetchAllCourses();
   }, [currentUser]);
 
-  // =================================================
-  // ========== 新增课程（server + redux） ============
-  // =================================================
+  // Add
   const onAddNewCourse = async () => {
     const newCourse = await client.createCourse(course);
     dispatch(setCourses([...courses, newCourse]));
+    fetchAllCourses();
   };
 
-  // =================================================
-  // ========== 删除课程（server + redux） ============
-  // =================================================
+  // Delete
   const onDeleteCourse = async (courseId: string) => {
     await client.deleteCourse(courseId);
     dispatch(setCourses(courses.filter((c: any) => c._id !== courseId)));
+    fetchAllCourses();
   };
 
-  // =================================================
-  // ========== 更新课程（server + redux） ============
-  // =================================================
+  // Update
   const onUpdateCourse = async () => {
     await client.updateCourse(course);
     dispatch(
       setCourses(
-        courses.map((c: any) =>
-          c._id === course._id ? course : c
-        )
+        courses.map((c: any) => (c._id === course._id ? course : c))
       )
     );
+    fetchAllCourses();
   };
+
+  // Enroll / Unenroll
+  const handleEnroll = async (cid: string) => {
+    await client.enrollIntoCourse(currentUser._id, cid);
+    fetchMyCourses(); // 更新我的课程
+  };
+
+  const handleUnenroll = async (cid: string) => {
+    await client.unenrollFromCourse(currentUser._id, cid);
+    fetchMyCourses();
+  };
+
+  // 当前显示哪些课程
+  const coursesToShow = showAll ? allCourses : courses;
 
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1>
+      <h1 id="wd-dashboard-title">
+        Dashboard
+
+        {/* ===== NEW: My Courses 按钮 ===== */}
+        <button
+          className="btn btn-primary float-end ms-2"
+          onClick={() => setShowAll(false)}
+        >
+          My Courses
+        </button>
+
+        {/* ===== NEW: All Courses 按钮 ===== */}
+        <button
+          className="btn btn-success float-end"
+          onClick={() => setShowAll(true)}
+        >
+          All Courses
+        </button>
+      </h1>
+
       <hr />
 
-      {/* ===================== New Course 区域 ===================== */}
+      {/* New Course Section */}
       <h5>
         New Course
         <button
@@ -117,7 +154,6 @@ export default function Dashboard() {
       </h5>
       <br />
 
-      {/* 输入框 */}
       <FormControl
         value={course.name}
         className="mb-2"
@@ -127,82 +163,112 @@ export default function Dashboard() {
         as="textarea"
         value={course.description}
         rows={3}
-        onChange={(e) => setCourse({ ...course, description: e.target.value })}
+        onChange={(e) =>
+          setCourse({ ...course, description: e.target.value })
+        }
       />
 
       <hr />
 
       <h2 id="wd-dashboard-published">
-        Published Courses ({courses.length})
+        {showAll
+          ? `All Courses (${coursesToShow.length})`
+          : `Published Courses (${coursesToShow.length})`}
       </h2>
 
       <hr />
 
-      {/* ======================== Courses 列表 ======================== */}
       <div id="wd-dashboard-courses">
         <Row xs={1} md={5} className="g-4">
-          {courses.map((c: any) => (
-            <Col
-              key={c._id}
-              className="wd-dashboard-course"
-              style={{ width: "300px" }}
-            >
-              <Card>
-                <CardImg
-                  src={c.image || "/images/reactjs.jpg"}
-                  variant="top"
-                  width="100%"
-                  height={160}
-                />
-                <CardBody>
-                  <Link
-                    href={`/Courses/${c._id}/Home`}
-                    className="wd-dashboard-course-link text-decoration-none text-dark"
-                  >
-                    <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                      {c.name}
-                    </CardTitle>
-                  </Link>
+          {coursesToShow.map((c: any) => {
+            const enrolled = courses.some((mc: any) => mc._id === c._id);
 
-                  <CardText
-                    className="wd-dashboard-course-description overflow-hidden"
-                    style={{ height: "100px" }}
-                  >
-                    {c.description}
-                  </CardText>
+            return (
+              <Col
+                key={c._id}
+                className="wd-dashboard-course"
+                style={{ width: "300px" }}
+              >
+                <Card>
+                  <CardImg
+                    src={c.image || "/images/reactjs.jpg"}
+                    variant="top"
+                    width="100%"
+                    height={160}
+                  />
+                  <CardBody>
+                    <Link
+                      href={`/Courses/${c._id}/Home`}
+                      className="wd-dashboard-course-link text-decoration-none text-dark"
+                    >
+                      <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
+                        {c.name}
+                      </CardTitle>
+                    </Link>
 
-                  <Button variant="primary" href={`/Courses/${c._id}/Home`}>
-                    Go
-                  </Button>
+                    <CardText
+                      className="wd-dashboard-course-description overflow-hidden"
+                      style={{ height: "100px" }}
+                    >
+                      {c.description}
+                    </CardText>
 
-                  {/* Edit */}
-                  <button
-                    className="btn btn-warning float-end me-2"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      setCourse(c);
-                    }}
-                  >
-                    Edit
-                  </button>
+                    <Button variant="primary" href={`/Courses/${c._id}/Home`}>
+                      Go
+                    </Button>
 
-                  {/* Delete */}
-                  <button
-                    className="btn btn-danger float-end"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      onDeleteCourse(c._id);
-                    }}
-                  >
-                    
-                    Delete
-                  </button>
-                </CardBody>
-              </Card>
-            </Col>
-          ))}
+                    {/* ========== NEW: Only show Enroll buttons in All Courses mode ========== */}
+                    {showAll && (
+                      <>
+                        {!enrolled && (
+                          <button
+                            className="btn btn-success float-end"
+                            onClick={() => handleEnroll(c._id)}
+                          >
+                            Enroll
+                          </button>
+                        )}
+
+                        {enrolled && (
+                          <button
+                            className="btn btn-danger float-end"
+                            onClick={() => handleUnenroll(c._id)}
+                          >
+                            Unenroll
+                          </button>
+                        )}
+                      </>
+                    )}
+                    {/* ==================================================================== */}
+
+                    {/* Edit */}
+                    <button
+                      className="btn btn-warning float-end me-2"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setCourse(c);
+                      }}
+                    >
+                      Edit
+                    </button>
+
+                    {/* Delete */}
+                    <button
+                      className="btn btn-danger float-end"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        onDeleteCourse(c._id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </CardBody>
+                </Card>
+              </Col>
+            );
+          })}
         </Row>
       </div>
     </div>

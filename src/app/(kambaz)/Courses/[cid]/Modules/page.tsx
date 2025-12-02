@@ -55,21 +55,28 @@ export default function Modules() {
   };
 
   // ⭐ 删除模块（DELETE）
-  const onRemoveModule = async (moduleId: string) => {
-    await client.deleteModule(moduleId);
-    dispatch(setModules(modules.filter((m: any) => m._id !== moduleId)));
-  };
+const onRemoveModule = async (moduleId: string) => {
+  if (typeof cid === "string") {
+    await client.deleteModule(cid, moduleId);
+  } else {
+    console.error("Invalid course ID");
+  }
+  dispatch(setModules(modules.filter((m: any) => m._id !== moduleId)));
+};
 
   // ⭐ 更新模块（PUT）
-  const onUpdateModule = async (module: any) => {
-    await client.updateModule(module);
+const onUpdateModule = async (module: any) => {
+  if (typeof cid === "string") {
+    await client.updateModule(cid, module);
+  } else {
+    console.error("Invalid course ID");
+  }
+  const newModules = modules.map((m: any) =>
+    m._id === module._id ? module : m
+  );
+  dispatch(setModules(newModules));
+};
 
-    const newModules = modules.map((m: any) =>
-      m._id === module._id ? module : m
-    );
-
-    dispatch(setModules(newModules));
-  };
 
   return (
     <div className="wd-modules">

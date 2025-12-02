@@ -13,26 +13,44 @@ export default function AssignmentEditor() {
 
   const [assignment, setAssignment] = useState<any | null>(null);
 
+  // 日期转换成 yyyy-MM-dd，给 <input type="date"> 用
+  const formatDate = (d?: string) =>
+    d ? new Date(d).toISOString().split("T")[0] : "";
+
   // === 加载 assignment ===
   const fetchAssignment = async () => {
+    if (!aid) return;
     const data = await client.fetchAssignmentById(aid as string);
-    setAssignment(data);
+
+    // 确保传给表单的是 "2025-12-01" 这种格式
+    setAssignment({
+      ...data,
+      dueDate: formatDate(data.dueDate),
+      availableFrom: formatDate(data.availableFrom),
+      untilDate: formatDate(data.untilDate),
+    });
   };
 
   useEffect(() => {
     fetchAssignment();
-  }, []);
+    // 依赖 aid，切换不同 assignment 时可以重新加载
+  }, [aid]);
 
   if (!assignment) return <div className="p-4">Loading...</div>;
 
   // === 保存 assignment ===
   const handleSave = async () => {
+    // 这里 assignment 里的日期已经是 yyyy-MM-dd 字符串
     await client.updateAssignment(assignment);
     router.push(`/Courses/${cid}/Assignments`);
   };
 
   return (
-    <div id="wd-assignment-editor" className="p-4" style={{ maxWidth: "800px" }}>
+    <div
+      id="wd-assignment-editor"
+      className="p-4"
+      style={{ maxWidth: "800px" }}
+    >
       <h3 className="mb-4">Edit Assignment</h3>
 
       <Form>
@@ -40,7 +58,7 @@ export default function AssignmentEditor() {
           <Form.Label>Assignment Name</Form.Label>
           <Form.Control
             type="text"
-            value={assignment.title}
+            value={assignment.title || ""}
             onChange={(e) =>
               setAssignment({ ...assignment, title: e.target.value })
             }
@@ -65,11 +83,14 @@ export default function AssignmentEditor() {
               <Form.Label>Points</Form.Label>
               <Form.Control
                 type="number"
-                value={assignment.points}
+                value={assignment.points ?? ""} // 避免 undefined
                 onChange={(e) =>
                   setAssignment({
                     ...assignment,
-                    points: Number(e.target.value),
+                    points:
+                      e.target.value === ""
+                        ? undefined
+                        : Number(e.target.value),
                   })
                 }
               />

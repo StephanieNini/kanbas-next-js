@@ -28,10 +28,11 @@ export default function AssignmentsPage() {
   );
 
   // ===============================
-  // 1. 页面加载时从服务器加载作业
+  // 1. 从服务器加载作业
   // ===============================
   const fetchAssignments = async () => {
     if (!cid) return;
+
     const data = await client.findAssignmentsForCourse(cid as string);
     dispatch(setAssignments(data));
   };
@@ -39,7 +40,6 @@ export default function AssignmentsPage() {
   useEffect(() => {
     fetchAssignments();
   }, [cid]);
-
 
   // ===============================
   // 2. 删除作业
@@ -50,7 +50,6 @@ export default function AssignmentsPage() {
     await client.deleteAssignment(assignmentId);
     dispatch(deleteAssignmentLocal(assignmentId));
   };
-
 
   // ===============================
   // 3. 当前课程的作业
@@ -102,7 +101,8 @@ export default function AssignmentsPage() {
                   </div>
 
                   <div className="text-muted small ms-4">
-                    Due {assignment.dueDate} | {assignment.points} pts
+                    Due {new Date(assignment.dueDate).toLocaleDateString()} |{" "}
+                    {assignment.points} pts
                   </div>
                 </div>
 
@@ -121,3 +121,4 @@ export default function AssignmentsPage() {
     </div>
   );
 }
+
